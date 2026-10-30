@@ -55,6 +55,27 @@ export const AppearanceSettings: SettingsGroup[] = [
     ]
   },
   {
+    key: "app-elements",
+    section: "appearance",
+    header: "App elements",
+    settings: [
+      {
+        key: "hide-status-bar",
+        title: "Hide status bar",
+        description: "Hide the status bar at the bottom of the app.",
+        onStateChange: (listener) =>
+          useSettingStore.subscribe((s) => s.hideStatusBar, listener),
+        components: [
+          {
+            type: "toggle",
+            isToggled: () => useSettingStore.getState().hideStatusBar,
+            toggle: () => useSettingStore.getState().toggleHideStatusBar()
+          }
+        ]
+      }
+    ]
+  },
+  {
     key: "theme",
     section: "appearance",
     header: strings.themes(),

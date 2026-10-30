@@ -25,6 +25,7 @@ import {
   Cross,
   Icon,
   Lock,
+  MoreHorizontal,
   NewTab,
   Note,
   NoteRemove,
@@ -188,15 +189,16 @@ export function EditorActionBar() {
         activeSession.type !== "conflicted",
       onClick: () => useEditorStore.getState().toggleProperties(),
       toggled: arePropertiesVisible
-    },
-    ...getWindowControls(
-      hasNativeWindowControls,
-      isFullscreen,
-      isMaximized,
-      isTablet,
-      isMobile
-    )
+    }
   ];
+
+  const windowControls = getWindowControls(
+    hasNativeWindowControls,
+    isFullscreen,
+    isMaximized,
+    isTablet,
+    isMobile
+  );
 
   return (
     <>
@@ -234,7 +236,49 @@ export function EditorActionBar() {
           flexShrink: 0
         }}
       >
-        {tools.map((tool) => (
+        <Button
+          data-test-id="editor-tools-menu"
+          variant="secondary"
+          title="Tools"
+          sx={{
+            p: 1,
+            alignItems: "center",
+            bg: "transparent",
+            display: "flex",
+            flexShrink: 0
+          }}
+          onClick={(e) => {
+            const target = e.currentTarget;
+            Menu.openMenu(
+              tools
+                .filter((tool) => !tool.hidden)
+                .map((tool) => ({
+                  type: "button" as const,
+                  key: tool.title,
+                  title: tool.title,
+                  icon: tool.icon.path,
+                  isDisabled: !tool.enabled,
+                  isChecked: tool.toggled,
+                  onClick: () =>
+                    tool.onClick({
+                      target
+                    } as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>)
+                })),
+              {
+                position: {
+                  target,
+                  location: "below",
+                  isTargetAbsolute: true,
+                  align: "end",
+                  yOffset: 5
+                }
+              }
+            );
+          }}
+        >
+          <MoreHorizontal size={16} />
+        </Button>
+        {windowControls.map((tool) => (
           <Button
             data-test-id={tool.title}
             disabled={!tool.enabled}
@@ -244,11 +288,8 @@ export function EditorActionBar() {
             sx={{
               p: 1,
               alignItems: "center",
-              bg: tool.toggled ? "background-selected" : "transparent",
-              display: [
-                "hideOnMobile" in tool && tool.hideOnMobile ? "none" : "flex",
-                tool.hidden ? "none" : "flex"
-              ],
+              bg: "transparent",
+              display: tool.hidden ? "none" : "flex",
               flexShrink: 0,
               "&:hover svg path": {
                 fill:
