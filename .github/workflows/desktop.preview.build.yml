@@ -72,9 +72,9 @@ jobs:
 
   build-macos:
     name: Build for macOS
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ github.repository == 'streetwriters/notesnook' && github.event.pull_request.head.repo.full_name == github.repository }}
     needs: build
-    runs-on: macos-14
+    runs-on: macos-15
     outputs:
       macos-artifact-url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
     steps:
@@ -146,9 +146,9 @@ jobs:
   # silicon) without hardened runtime, which ad-hoc signatures can't satisfy.
   build-macos-unsigned:
     name: Build for macOS (unsigned)
-    if: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+    if: ${{ github.repository != 'streetwriters/notesnook' || github.event.pull_request.head.repo.full_name != github.repository }}
     needs: build
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v5
