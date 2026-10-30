@@ -14,6 +14,14 @@
   -webkit-app-region: no-drag;
 }
 
+/* align the first toolbar icon with the editor body text */
+.editor-toolbar > .toolbar-group:first-of-type {
+  padding-left: 0;
+}
+.editor-toolbar > .toolbar-group:first-of-type > button:first-of-type {
+  margin-left: -6px;
+}
+
 @font-face {
   font-family: "Inter";
   font-style: normal;
