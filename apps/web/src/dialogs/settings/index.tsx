@@ -25,6 +25,7 @@ import {
   Appearance,
   Backup,
   Behaviour,
+  Cross,
   CellphoneLock,
   Desktop,
   Documentation,
@@ -231,9 +232,28 @@ export const SettingsDialog = DialogManager.register(function SettingsDialog(
       <Flex
         sx={{
           height: "80vw",
-          overflow: "hidden"
+          overflow: "hidden",
+          position: "relative"
         }}
       >
+        <Button
+          variant="secondary"
+          title={strings.close()}
+          data-test-id="settings-close"
+          sx={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            zIndex: 2,
+            borderRadius: 100,
+            p: 1,
+            display: "flex",
+            alignItems: "center"
+          }}
+          onClick={() => props.onClose(false)}
+        >
+          <Cross size={18} />
+        </Button>
         <SettingsSideBar
           activeSection={props.activeSection}
           onNavigate={(settings) => {

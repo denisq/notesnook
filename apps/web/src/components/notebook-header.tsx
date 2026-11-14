@@ -85,19 +85,16 @@ export function NotebookHeader(props: {
       }}
     >
       <NotebookCrumbs notebook={notebook} />
-      <Notebook2
-        size={24}
-        sx={{
-          alignSelf: "start"
-        }}
-      />
-      <Text
-        data-test-id="notebook-title"
-        variant="heading"
-        sx={{ fontSize: "title" }}
-      >
-        {title}
-      </Text>
+      <Flex sx={{ alignItems: "center", gap: 1 }}>
+        <Notebook2 size={18} />
+        <Text
+          data-test-id="notebook-title"
+          variant="heading"
+          sx={{ fontSize: "title" }}
+        >
+          {title}
+        </Text>
+      </Flex>
       {description && <Text variant="body">{description}</Text>}
       <Flex sx={{ alignItems: "center", justifyContent: "space-between" }}>
         <Flex sx={{ alignItems: "center", gap: 2 }}>

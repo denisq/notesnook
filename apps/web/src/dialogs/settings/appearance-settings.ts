@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { SettingsGroup } from "./types";
 import { useStore as useSettingStore } from "../../stores/setting-store";
+import { useEditorStore } from "../../stores/editor-store";
 import { useStore as useThemeStore } from "../../stores/theme-store";
 import { ThemesSelector } from "./components/themes-selector";
 import { strings } from "@notesnook/intl";
@@ -49,6 +50,42 @@ export const AppearanceSettings: SettingsGroup[] = [
             step: 0.1,
             defaultValue: () => useSettingStore.getState().zoomFactor,
             onChange: (value) => useSettingStore.getState().setZoomFactor(value)
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: "app-elements",
+    section: "appearance",
+    header: "App elements",
+    settings: [
+      {
+        key: "hide-status-bar",
+        title: "Hide status bar",
+        description: "Hide the status bar at the bottom of the app.",
+        onStateChange: (listener) =>
+          useSettingStore.subscribe((s) => s.hideStatusBar, listener),
+        components: [
+          {
+            type: "toggle",
+            isToggled: () => useSettingStore.getState().hideStatusBar,
+            toggle: () => useSettingStore.getState().toggleHideStatusBar()
+          }
+        ]
+      },
+      {
+        key: "editor-margins",
+        title: "Editor margins",
+        description:
+          "Limit the editor to a comfortable reading width instead of using the full window width.",
+        onStateChange: (listener) =>
+          useEditorStore.subscribe((s) => s.editorMargins, listener),
+        components: [
+          {
+            type: "toggle",
+            isToggled: () => useEditorStore.getState().editorMargins,
+            toggle: () => useEditorStore.getState().toggleEditorMargins()
           }
         ]
       }

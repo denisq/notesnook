@@ -64,7 +64,6 @@ import useMobile from "../../hooks/use-mobile";
 import useTablet from "../../hooks/use-tablet";
 import { TimeFormat } from "@notesnook/core";
 import { EDITOR_ZOOM } from "./common";
-import { ScrollContainer } from "@notesnook/ui";
 import { showFeatureNotAllowedToast } from "../../common/toasts";
 import { UpgradeDialog } from "../../dialogs/buy-dialog/upgrade-dialog";
 import { ConfirmDialog } from "../../dialogs/confirm";
@@ -554,36 +553,13 @@ function TipTap(props: TipTapProps) {
           zIndex: 2
         }}
       >
-        <ScrollContainer
-          className="toolbarScroll"
-          suppressScrollY
-          style={{ display: "flex", overscrollBehavior: "contain" }}
-          trackStyle={() => ({
-            backgroundColor: "transparent",
-            "--ms-track-size": "6px"
-          })}
-          thumbStyle={() => ({ height: 3 })}
-          onWheel={(e) => {
-            const scrollcontainer = document.querySelector(
-              ".active .toolbarScroll"
-            );
-            if (!scrollcontainer) return;
-            if (e.deltaY > 0) scrollcontainer.scrollLeft += 100;
-            else if (e.deltaY < 0) scrollcontainer.scrollLeft -= 100;
-          }}
-        >
-          <Toolbar
-            editor={editor}
-            location={"top"}
-            sx={{
-              flexWrap: "unset",
-              overflowX: "unset"
-            }}
-            tools={toolbarConfig}
-            defaultFontFamily={fontFamily}
-            defaultFontSize={fontSize}
-          />
-        </ScrollContainer>
+        <Toolbar
+          editor={editor}
+          location={"top"}
+          tools={toolbarConfig}
+          defaultFontFamily={fontFamily}
+          defaultFontSize={fontSize}
+        />
       </ScopedThemeProvider>
     </>
   );

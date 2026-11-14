@@ -69,6 +69,7 @@ class SettingStore extends BaseStore<SettingStore> {
   privacyMode = false;
   customDns = true;
   hideNoteTitle = Config.get("hideNoteTitle", false);
+  hideStatusBar = Config.get("hideStatusBar", false);
   dateFormat = "DD-MM-YYYY";
   timeFormat: TimeFormat = "12-hour";
   dayFormat: DayFormat = "short";
@@ -285,6 +286,12 @@ class SettingStore extends BaseStore<SettingStore> {
     const { hideNoteTitle } = this.get();
     this.set({ hideNoteTitle: !hideNoteTitle });
     Config.set("hideNoteTitle", !hideNoteTitle);
+  };
+
+  toggleHideStatusBar = async () => {
+    const { hideStatusBar } = this.get();
+    this.set({ hideStatusBar: !hideStatusBar });
+    Config.set("hideStatusBar", !hideStatusBar);
   };
 
   toggleAutoUpdates = async () => {

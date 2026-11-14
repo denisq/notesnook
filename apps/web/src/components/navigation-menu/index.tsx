@@ -49,8 +49,13 @@ import {
   SortBy,
   Tag as TagIcon,
   InternalLink,
-  ClearTrash
+  ClearTrash,
+  Sync,
+  ConsoleLine
 } from "../icons";
+import { getTimeAgo } from "@notesnook/common";
+import { isMac } from "../../utils/platform";
+import { CommandPaletteDialog } from "../../dialogs/command-palette";
 import { SortableNavigationItem } from "./navigation-item";
 import {
   getCurrentPath,
@@ -864,6 +869,9 @@ function NavigationDropdown() {
   const setFollowSystemTheme = useThemeStore(
     (store) => store.setFollowSystemTheme
   );
+  const sync = useAppStore((store) => store.sync);
+  const lastSynced = useAppStore((store) => store.lastSynced);
+  const isSyncEnabled = useAppStore((store) => store.isSyncEnabled);
 
   const isSubscribed = useMemo(() => isUserSubscribed(user), [user]);
 
@@ -884,6 +892,35 @@ function NavigationDropdown() {
             {
               type: "separator",
               key: "sep"
+            },
+            {
+              type: "button",
+              title: !notLoggedIn
+                ? `Sync now — ${
+                    !isSyncEnabled
+                      ? "sync disabled"
+                      : lastSynced
+                      ? `synced ${getTimeAgo(lastSynced)}`
+                      : "not synced yet"
+                  }`
+                : "Sync — not logged in",
+              key: "sync-now",
+              icon: Sync.path,
+              isDisabled: notLoggedIn || !isSyncEnabled,
+              onClick: () => sync()
+            },
+            {
+              type: "button",
+              title: `${strings.commandPalette()} (${
+                isMac() ? "⌘" : "Ctrl+"
+              }K)`,
+              key: "command-palette",
+              icon: ConsoleLine.path,
+              onClick: () => CommandPaletteDialog.show({ isCommandMode: true })
+            },
+            {
+              type: "separator",
+              key: "sep-sync"
             },
             {
               type: "button",

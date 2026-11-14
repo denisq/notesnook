@@ -25,6 +25,13 @@ import TypedEventEmitter from "typed-emitter";
 export type AppEvents = {
   onCreateItem(name: "note" | "notebook" | "reminder"): void;
   onOpenLink(url: string): void;
+  onAction(
+    action:
+      | "open-settings"
+      | "toggle-status-bar"
+      | "toggle-focus-mode"
+      | "toggle-list-pane"
+  ): void;
   bridgeReady(): void;
 };
 let isBridgeReady = false;
@@ -36,6 +43,7 @@ const t = initTRPC.create();
 export const bridgeRouter = t.router({
   onCreateItem: createSubscription("onCreateItem"),
   onOpenLink: createSubscription("onOpenLink"),
+  onAction: createSubscription("onAction"),
   ready: t.procedure.query(() => {
     isBridgeReady = true;
     if (pendingEvents.length > 0) {

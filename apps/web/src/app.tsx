@@ -140,6 +140,7 @@ export default App;
 function DesktopAppContents() {
   const isFocusMode = useStore((store) => store.isFocusMode);
   const isListPaneVisible = useStore((store) => store.isListPaneVisible);
+  const hideStatusBar = useSettingStore((store) => store.hideStatusBar);
   const isTablet = useTablet();
   const navPane = useRef<SplitPaneImperativeHandle>(null);
 
@@ -260,7 +261,7 @@ function DesktopAppContents() {
           </Pane>
         </SplitPane>
       </Flex>
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
     </>
   );
 }

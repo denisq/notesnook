@@ -27,10 +27,8 @@ import {
   FocusMode,
   Plus,
   Minus,
-  EditorNormalWidth,
   ExitFullscreen,
   Fullscreen,
-  EditorFullWidth,
   NormalMode,
   Cross
 } from "../icons";
@@ -60,7 +58,6 @@ function EditorFooter() {
   const statistics = useNoteStatistics();
   const session = useEditorStore((store) => store.getActiveSession());
   const { editorConfig, setEditorConfig } = useEditorConfig();
-  const editorMargins = useEditorStore((store) => store.editorMargins);
   const isFocusMode = useAppStore((store) => store.isFocusMode);
   const [isStatisticsPopupOpen, setIsStatisticsPopupOpen] = useState(false);
   const statisticsRef = useRef<HTMLButtonElement | null>(null);
@@ -72,15 +69,6 @@ function EditorFooter() {
   const dateEdited = "note" in session ? session.note.dateEdited : 0;
   const SaveStateIcon = SAVE_STATE_ICON_MAP[saveState];
   const tools = [
-    {
-      title: editorMargins
-        ? strings.disableEditorMargins()
-        : strings.enableEditorMargins(),
-      icon: editorMargins ? EditorNormalWidth : EditorFullWidth,
-      enabled: true,
-      hideOnMobile: true,
-      onClick: () => useEditorStore.getState().toggleEditorMargins()
-    },
     {
       title: isFullscreen
         ? strings.exitFullScreen()
