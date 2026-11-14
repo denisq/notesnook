@@ -23,6 +23,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Cross,
+  FocusMode,
   Icon,
   Lock,
   MoreHorizontal,
@@ -117,6 +118,7 @@ export function EditorActionBar() {
     db.monographs.isPublished(activeSession.note.id);
   const isMobile = useMobile();
   const isTablet = useTablet();
+  const isFocusMode = useAppStore((store) => store.isFocusMode);
 
   const tools: ToolButton[] = [
     {
@@ -189,6 +191,13 @@ export function EditorActionBar() {
         activeSession.type !== "conflicted",
       onClick: () => useEditorStore.getState().toggleProperties(),
       toggled: arePropertiesVisible
+    },
+    {
+      title: isFocusMode ? strings.normalMode() : strings.focusMode(),
+      icon: FocusMode,
+      enabled: true,
+      onClick: () => useAppStore.getState().toggleFocusMode(),
+      toggled: isFocusMode
     }
   ];
 

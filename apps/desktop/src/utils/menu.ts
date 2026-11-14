@@ -18,9 +18,88 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { strings } from "@notesnook/intl";
-import { Menu, MenuItem, clipboard, shell } from "electron";
+import { Menu, MenuItem, app, clipboard, shell } from "electron";
+import { bridge } from "../api/bridge";
+
+function setupApplicationMenu() {
+  if (process.platform !== "darwin") return;
+
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: app.name,
+      submenu: [
+        { role: "about" },
+        { type: "separator" },
+        {
+          label: "Settings…",
+          accelerator: "Command+,",
+          click: () => bridge.onAction("open-settings")
+        },
+        { type: "separator" },
+        { role: "services" },
+        { type: "separator" },
+        { role: "hide" },
+        { role: "hideOthers" },
+        { role: "unhide" },
+        { type: "separator" },
+        { role: "quit" }
+      ]
+    },
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "New Note",
+          accelerator: "Command+N",
+          click: () => bridge.onCreateItem("note")
+        },
+        {
+          label: "New Notebook",
+          accelerator: "Command+Shift+N",
+          click: () => bridge.onCreateItem("notebook")
+        },
+        { type: "separator" },
+        { role: "close" }
+      ]
+    },
+    { role: "editMenu" },
+    {
+      label: "View",
+      submenu: [
+        {
+          label: "Toggle Status Bar",
+          click: () => bridge.onAction("toggle-status-bar")
+        },
+        {
+          label: "Toggle Notes List",
+          click: () => bridge.onAction("toggle-list-pane")
+        },
+        {
+          label: "Toggle Focus Mode",
+          click: () => bridge.onAction("toggle-focus-mode")
+        },
+        { type: "separator" },
+        { role: "togglefullscreen" }
+      ]
+    },
+    { role: "windowMenu" },
+    {
+      role: "help",
+      submenu: [
+        {
+          label: "Help & Support",
+          click: () => shell.openExternal("https://help.notesnook.com")
+        }
+      ]
+    }
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
 
 function setupMenu() {
+  setupApplicationMenu();
+
   if (!globalThis.window) return;
 
   globalThis.window.webContents.on("context-menu", (_event, params) => {

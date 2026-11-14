@@ -69,6 +69,31 @@ function attachListeners() {
     attachListener(AppEvents.onOpenLink)
   );
 
+  desktop.bridge.onAction.subscribe(undefined, {
+    async onData(action) {
+      switch (action) {
+        case "open-settings": {
+          const { hashNavigate } = await import("../../navigation");
+          hashNavigate("/settings");
+          break;
+        }
+        case "toggle-status-bar":
+          settingStore.get().toggleHideStatusBar();
+          break;
+        case "toggle-focus-mode": {
+          const { store: appStore } = await import("../../stores/app-store");
+          appStore.get().toggleFocusMode();
+          break;
+        }
+        case "toggle-list-pane": {
+          const { store: appStore } = await import("../../stores/app-store");
+          appStore.get().toggleListPane();
+          break;
+        }
+      }
+    }
+  });
+
   TaskScheduler.register("updateCheck", "0 0 */12 * * * *", () => {
     checkForUpdate(settingStore.get().autoUpdates);
   });
